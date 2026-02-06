@@ -232,6 +232,7 @@ jobs:
         with:
           context: openeverest-operator
           push: true
+          provenance: false
           platforms: ${{ matrix.platform }}
           tags: ${{ steps.operator_meta.outputs.tags }}
           build-args: |
@@ -242,6 +243,7 @@ jobs:
         with:
           context: openeverest-operator
           push: true
+          provenance: false
           platforms: ${{ matrix.platform }}
           tags: ${{ steps.bundle_meta.outputs.tags }}
           file: openeverest-operator/bundle.Dockerfile
@@ -312,6 +314,7 @@ jobs:
         with:
           context: percona-version-service
           push: true
+          provenance: false
           platforms: ${{ matrix.platform }}
           tags: ${{ env.IMAGE_PREFIX }}/${{ env.EVEREST_VERSION_SERVICE_DEV_IMAGE_NAME }}:${{ env.VS_TAG }}
 
@@ -338,6 +341,7 @@ jobs:
         with:
           context: openeverest-catalog
           push: true
+          provenance: false
           platforms: ${{ matrix.platform }}
           tags: ${{ steps.catalog_meta.outputs.tags }}
           file: openeverest-catalog/everest-catalog.Dockerfile
@@ -401,6 +405,7 @@ jobs:
         with:
           context: .
           push: true
+          provenance: false
           platforms: ${{ matrix.platform }}
           tags: ${{ env.IMAGE_PREFIX }}/${{ env.EVEREST_SERVER_DEV_IMAGE_NAME }}:${{ env.VERSION }}
 
