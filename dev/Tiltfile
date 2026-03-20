@@ -225,9 +225,15 @@ for namespace in pxc_namespaces:
 ## Percona Server MongoDB (PSMDB) ##
 ####################################
 
-# Download PSMDB operator manifests
+# Synchronous guard: download PSMDB manifests if missing, ensuring files exist before k8s_yaml() is called
 psmdb_base_url = 'https://raw.githubusercontent.com/percona/percona-server-mongodb-operator/v{0}/deploy'.format(psmdb_operator_version)
 
+if not db_operator_manifests_present(cache_dir, 'psmdb', psmdb_operator_version):
+    local(
+        'for manifest in crd rbac operator; do curl -s {0}/$manifest.yaml -o {1}/psmdb-operator-v{2}-$manifest.yaml; done'.format(psmdb_base_url, cache_dir, psmdb_operator_version),
+    )
+
+# Async local resource: redundant if sync guard ran, but provides cleanup and serves as task dependency
 local_resource(
   'psmdb-download-manifests',
   'for manifest in crd rbac operator; do test -f {0}/psmdb-operator-v{1}-$manifest.yaml || curl -s {2}/$manifest.yaml -o {0}/psmdb-operator-v{1}-$manifest.yaml; done'.format(cache_dir, psmdb_operator_version, psmdb_base_url),
